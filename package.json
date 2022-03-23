@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "test-single": "node dist/index.js --binaryPath /home/fayeed/.config/ad4m-test/binary/ad4m-host --bundle language/sdp.js --meta '{\"name\":\"shortform-expression\",\"description\":\"Shortform expression for flux application\",\"sourceCodeLink\":\"https://github.com/juntofoundation/ad4m-languages\",\"possibleTemplateParams\":[\"uid\",\"name\"]}'",
-    "test-config": "node dist/index.js --defaultLangPath ./language --binaryPath /home/fayeed/.config/ad4m-test/binary/ad4m-host --config ../ad4m.json"
+    "build": "ncc build ./src/index.ts -o dist",
+    "test-single": "node dist/index.js --agent ../agent.json --binaryPath /home/fayeed/.config/ad4m-test/binary/ad4m-host --bundle language/sdp/build/bundle.js --meta '{\"name\":\"shortform-expression\",\"description\":\"Shortform expression for flux application\",\"sourceCodeLink\":\"https://github.com/juntofoundation/ad4m-languages\",\"possibleTemplateParams\":[\"uid\",\"name\"]}'",
+    "test-config": "node dist/index.js --agent ../agent.json --defaultLangPath ./language --binaryPath /home/fayeed/.config/ad4m-test/binary/ad4m-host --config ../ad4m.json"
   },
   "author": "",
   "license": "ISC",
