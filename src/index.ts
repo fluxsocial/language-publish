@@ -11,6 +11,7 @@ import fs from 'fs-extra';
 import { cleanOutput } from './utils';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
+
 const logger = {
   info: (...args: any[]) => !global.hideLogs && console.log(chalk.blue('[INFO]'),...args),
   error: (...args: any[]) => !global.hideLogs && console.error(chalk.red('[ERROR]'), ...args)
@@ -43,8 +44,8 @@ async function publishLanguage(binaryPath: string, bundle: string, meta: string)
   }
 }
 
-async function installLanguageAndPublish(child: any, binaryPath: string, defaultLangPath: string, bundle?: string, meta?: string, configPath?: string, resolve?: any) {  
-  const generateAgentResponse = execSync(`${binaryPath} agent unlock --passphrase passphrase`, { encoding: 'utf-8' }).match(/did:key:\w+/)
+async function installLanguageAndPublish(child: any, binaryPath: string, defaultLangPath: string, passphrase: string, bundle?: string, meta?: string, configPath?: string, resolve?: any) {  
+  const generateAgentResponse = execSync(`${binaryPath} agent unlock --passphrase ${passphrase}`, { encoding: 'utf-8' }).match(/did:key:\w+/)
   const currentAgentDid =  generateAgentResponse![0];
   logger.info(`Current Agent did: ${currentAgentDid}`);
   
@@ -76,7 +77,7 @@ async function installLanguageAndPublish(child: any, binaryPath: string, default
 }
 
 
-export function startServer(relativePath: string, agent: string, binaryPath: string, defaultLangPath: string, bundle?: string, meta?: string, config?: string, port?: number,) {
+export function startServer(relativePath: string, agent: string, binaryPath: string, defaultLangPath: string, passphrase: string, bundle?: string, meta?: string, config?: string, port?: number,) {
   return new Promise(async (resolve, reject) => {
     const dataPath = path.join(getAppDataPath(relativePath), 'ad4m')
     fs.removeSync(dataPath)
@@ -107,7 +108,7 @@ export function startServer(relativePath: string, agent: string, binaryPath: str
 
     child.stdout.on('data', async (data: any) => {
       if (data.toString().includes('AD4M init complete')) {
-        installLanguageAndPublish(child, binaryPath, defaultLangPath, bundle, meta, config, resolve);
+        installLanguageAndPublish(child, binaryPath, defaultLangPath, passphrase, bundle, meta, config, resolve);
       }
     });
 
@@ -164,6 +165,11 @@ async function main() {
       type: 'string',
       describe: 'Agent to be used for publishing languages',
       required: true
+    },
+    passphrase: {
+      type: 'string',
+      describe: 'Passphrase used to unlock the agent who will be used for publishing',
+      required: true
     }
   })
   .strict()
@@ -173,7 +179,7 @@ async function main() {
   })
   .argv;
 
-  startServer('ad4m-publish', args.agent, args.binaryPath, args.defaultLangPath, args.bundle, args.meta, args.config, args.port)
+  startServer('ad4m-publish', args.agent, args.binaryPath, args.defaultLangPath, args.passphrase, args.bundle, args.meta, args.config, args.port)
 }
 
 main();
