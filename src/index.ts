@@ -217,7 +217,7 @@ async function main() {
     networkBootstrapSeed: {
       type: 'string',
       describe: 'Path to the seed file',
-      require: true,
+      default: '../bootstrapSeed.json',
       alias: 'nbf'
     },
     passphrase: {
