@@ -22,6 +22,8 @@ npm i && npm run prepare && npm run build
 node dist/index.js --agent /path/to/agent/to/publish/with --passphrase passphraseOfAgent --config ../languagePublishData.json
 ```
 
+Once the above step has been run succesfully a `publishedLanguages.json` file will be written containing the hashes of lanuages that have been published.
+
 #### Publish A Single Language
 
 ```
