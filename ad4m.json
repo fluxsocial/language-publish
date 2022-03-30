@@ -1,8 +1,0 @@
-{
-  "sdp": {
-    "name": "shortform-expression",
-    "description": "Shortform expression for flux application",
-    "sourceCodeLink": "https://github.com/juntofoundation/ad4m-languages",
-    "possibleTemplateParams": ["uid", "name"]
-  }
-}
