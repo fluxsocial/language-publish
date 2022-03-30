@@ -19,7 +19,7 @@ const logger = {
   error: (...args: any[]) => !global.hideLogs && console.error(chalk.red('[ERROR]'), ...args)
 }
 
-let langAddress: {[x: string]: string} = {}
+let publishedLanguages: {[x: string]: string} = {}
 
 async function getAd4mHostBinary(relativePath: string) {
   return new Promise(async (resolve, reject) => {
@@ -99,6 +99,11 @@ async function publishLanguage(binaryPath: string, bundle: string, meta: string)
   }
 }
 
+async function writeLanguageHashes() {
+  const publishedLanguagesPath = path.join("./publishedLanguages.json");
+  fs.writeFileSync(publishedLanguagesPath, JSON.stringify(publishedLanguages));
+}
+
 async function installLanguageAndPublish(child: any, binaryPath: string, passphrase: string, bundle?: string, meta?: string, configPath?: string, resolve?: any) {  
   const generateAgentResponse = execSync(`${binaryPath} agent unlock --passphrase ${passphrase}`, { encoding: 'utf-8' }).match(/did:key:\w+/)
   const currentAgentDid =  generateAgentResponse![0];
@@ -106,16 +111,17 @@ async function installLanguageAndPublish(child: any, binaryPath: string, passphr
   
   if (configPath) {
     const config = (await import(configPath)).default;
-
-    console.log('config', config);
     
-    for (const [lang, meta] of Object.entries(config)) {
+    for (const [lang, data] of Object.entries(config)) {
       const bundle = path.join(languagesPath, lang, "build", "bundle.js");
+      //@ts-ignore
+      const meta = data["meta"];
+      logger.info("Publishing language: ", lang, " with bundle: ", bundle, " with meta: ", meta);
       const language = await publishLanguage(binaryPath, bundle, JSON.stringify(meta))
-      langAddress[lang] = language.address;
+      publishedLanguages[lang] = language.address;
     }
 
-    logger.info('Published Languages =>', langAddress)
+    logger.info('Published Languages =>', publishedLanguages)
   } else if (bundle && meta) {
     const language = await publishLanguage(binaryPath, bundle, meta as string);
 
@@ -146,7 +152,7 @@ export function startServer(relativePath: string, agent: string, networkBootstra
 
     execSync(`${binaryPath} init --dataPath ${relativePath}`, { encoding: 'utf-8' });
 
-    logger.info('ad4m-test initialized')
+    logger.info('ad4m initialized')
 
     let child: any;
 
@@ -163,7 +169,8 @@ export function startServer(relativePath: string, agent: string, networkBootstra
 
     child.stdout.on('data', async (data: any) => {
       if (data.toString().includes('AD4M init complete')) {
-        installLanguageAndPublish(child, binaryPath, passphrase, bundle, meta, config, resolve);
+        await installLanguageAndPublish(child, binaryPath, passphrase, bundle, meta, config, resolve);
+        await writeLanguageHashes();
       }
     });
 

@@ -19,7 +19,7 @@ npm i && npm run prepare && npm run build
 #### Publish Multiple Languages
 
 ```
-node dist/index.js --agent /path/to/agent/to/publish/with --passphrase passphraseOfAgent --config ./languagePublishData.json
+node dist/index.js --agent /path/to/agent/to/publish/with --passphrase passphraseOfAgent --config ../languagePublishData.json
 ```
 
 #### Publish A Single Language
