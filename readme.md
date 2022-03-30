@@ -32,7 +32,7 @@ node dist/index.js --agent /path/to/agent/to/publish/with --passphrase passphras
 
 #### Generating a bootstrap seed
 
-This ability allows the generation of a bootstrap seed to be used in ad4m ecosystem. It expects that `publishedLanguages.json` contains all required system languages and will fetch the languageLanguage from the `const languageLanguageResource` set in the `scripts/generateBootstrapSeed.js` file. To create a bootstrap seed run:
+This ability allows the generation of a bootstrap seed to be used in ad4m ecosystem. It expects that `publishedLanguages.json` contains all required system languages and will fetch the languageLanguage from the value inside `scripts/languageLanguageResource`. To create a bootstrap seed run:
 
 ```
 npm run generate-bootstrap-seed
