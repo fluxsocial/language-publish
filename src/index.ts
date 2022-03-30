@@ -19,6 +19,8 @@ const logger = {
 
 let langAddress: {[x: string]: string} = {}
 
+const languagesPath = path.join("./languages");
+
 async function findAndKillProcess(processName: string) {
   try {
     const list = await findProcess('name', processName)
@@ -44,7 +46,7 @@ async function publishLanguage(binaryPath: string, bundle: string, meta: string)
   }
 }
 
-async function installLanguageAndPublish(child: any, binaryPath: string, defaultLangPath: string, passphrase: string, bundle?: string, meta?: string, configPath?: string, resolve?: any) {  
+async function installLanguageAndPublish(child: any, binaryPath: string, passphrase: string, bundle?: string, meta?: string, configPath?: string, resolve?: any) {  
   const generateAgentResponse = execSync(`${binaryPath} agent unlock --passphrase ${passphrase}`, { encoding: 'utf-8' }).match(/did:key:\w+/)
   const currentAgentDid =  generateAgentResponse![0];
   logger.info(`Current Agent did: ${currentAgentDid}`);
@@ -55,7 +57,7 @@ async function installLanguageAndPublish(child: any, binaryPath: string, default
     console.log('config', config);
     
     for (const [lang, meta] of Object.entries(config)) {
-      const bundle = path.join(defaultLangPath, lang, "build", "bundle.js");
+      const bundle = path.join(languagesPath, lang, "build", "bundle.js");
       const language = await publishLanguage(binaryPath, bundle, JSON.stringify(meta))
       langAddress[lang] = language.address;
     }
@@ -77,7 +79,7 @@ async function installLanguageAndPublish(child: any, binaryPath: string, default
 }
 
 
-export function startServer(relativePath: string, agent: string, binaryPath: string, defaultLangPath: string, passphrase: string, bundle?: string, meta?: string, config?: string, port?: number,) {
+export function startServer(relativePath: string, agent: string, binaryPath: string, passphrase: string, bundle?: string, meta?: string, config?: string, port?: number,) {
   return new Promise(async (resolve, reject) => {
     const dataPath = path.join(getAppDataPath(relativePath), 'ad4m')
     fs.removeSync(dataPath)
@@ -108,7 +110,7 @@ export function startServer(relativePath: string, agent: string, binaryPath: str
 
     child.stdout.on('data', async (data: any) => {
       if (data.toString().includes('AD4M init complete')) {
-        installLanguageAndPublish(child, binaryPath, defaultLangPath, passphrase, bundle, meta, config, resolve);
+        installLanguageAndPublish(child, binaryPath, passphrase, bundle, meta, config, resolve);
       }
     });
 
@@ -155,12 +157,6 @@ async function main() {
       describe: 'Meta information for the language to be installed',
       alias: 'm'
     },
-    defaultLangPath: {
-      type: 'string',
-      describe: 'Local bulid-in language to be used instead of the packaged ones',
-      default: path.join(__dirname, './test-temp/languages'),
-      alias: 'dlp'
-    },
     agent: {
       type: 'string',
       describe: 'Agent to be used for publishing languages',
@@ -179,7 +175,7 @@ async function main() {
   })
   .argv;
 
-  startServer('ad4m-publish', args.agent, args.binaryPath, args.defaultLangPath, args.passphrase, args.bundle, args.meta, args.config, args.port)
+  startServer('ad4m-publish', args.agent, args.binaryPath, args.passphrase, args.bundle, args.meta, args.config, args.port)
 }
 
 main();
