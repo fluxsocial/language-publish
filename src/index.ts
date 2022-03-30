@@ -178,11 +178,11 @@ export function startServer(relativePath: string, agent: string, networkBootstra
       logger.info(`exit is called ${code}`);
     })
 
-    child.on('error', () => {
+    child.on('error', async () => {
       logger.error(`process error: ${child.pid}`)
-      findAndKillProcess('holochain')
-      findAndKillProcess('lair-keystore')
-      findAndKillProcess('ad4m-host')
+      await findAndKillProcess('holochain')
+      await findAndKillProcess('lair-keystore')
+      await findAndKillProcess('ad4m-host')
       reject()
     });
   });

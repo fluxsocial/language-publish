@@ -6,12 +6,10 @@ const path = require("path");
 
 const languagesDirectory = "./languages";
 const bootstrapSeed = "./bootstrapSeed.json";
-const languageLanguage = "https://github.com/fluxsocial/language-persistence/releases/download/0.0.18/bundle.js";
+const languageLanguage = fs.readFileSync("./scripts/languageLanguageResource").toString();
 const languageLanguageBundlePath = path.join(languagesDirectory, "languageLanguage", "bundle.js");
 
-if (!fs.existsSync(path.join(languagesDirectory))) {
-    fs.mkdirSync(path.join(languagesDirectory));
-}
+fs.ensureDirSync(languagesDirectory);
 
 if (!fs.existsSync(path.join(languagesDirectory, "languageLanguage"))) {
     fs.mkdirSync(path.join(languagesDirectory, "languageLanguage"));

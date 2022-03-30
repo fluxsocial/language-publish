@@ -1,43 +1,43 @@
 {
-  "social-context": {
+  "socialContext": {
     "meta": {
-      "name": "social-context",
+      "name": "socialContext",
       "description": "Holochain based LinkLanguage",
       "sourceCodeLink": "https://github.com/fluxsocial/Social-Context",
       "possibleTemplateParams": ["uid", "name", "description"]
     },
     "resource": "https://github.com/fluxsocial/Social-Context/releases/download/0.0.22/bundle.js"
   },
-  "agent-expression-store": {
+  "agentLanguage": {
     "meta": {
-      "name": "agent-expression-store", 
+      "name": "agentLanguage", 
       "description": "Holochain based expression language for storing ad4m agent expressions", 
       "sourceCodeLink": "https://github.com/perspect3vism/agent-language",
       "possibleTemplateParams": ["uid", "name", "description"]
     },
     "resource": "https://github.com/perspect3vism/agent-language/releases/download/0.0.10/bundle.js"
   },
-  "direct-message-language": {
+  "directMessageLanguage": {
     "meta": {
-      "name": "direct-message-language", 
+      "name": "directMessageLanguage", 
       "description": "Holochain based language for direct messages on ad4m",
       "sourceCodeLink": "https://github.com/perspect3vism/direct-message-language", 
       "possibleTemplateParams": ["recipient_did", "recipient_hc_agent_pubkey"]
     },
     "resource": "https://github.com/perspect3vism/direct-message-language/releases/download/0.0.4/bundle.js"
   },
-  "neighbourhood-store": {
+  "neighbourhoodLanguage": {
     "meta": {
-      "name": "neighbourhood-store", 
+      "name": "neighbourhoodLanguage", 
       "description": "Holochain based language for storing neighbourhood expressions",
       "sourceCodeLink": "https://github.com/fluxsocial/neighbourhood-language", 
       "possibleTemplateParams": ["uid", "name", "description"]
     },
     "resource": "https://github.com/fluxsocial/neighbourhood-language/releases/download/0.0.5/bundle.js"
   },
-  "perspective-language": {
+  "perspectiveLanguage": {
     "meta": {
-      "name": "perspective-language", 
+      "name": "perspectiveLanguage", 
       "description": "Holochain based language for storing perspective expressions", 
       "sourceCodeLink": "https://github.com/perspect3vism/perspective-language",
       "possibleTemplateParams": ["uid", "name", "description"]

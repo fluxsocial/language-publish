@@ -2,7 +2,7 @@
 
 # Overview
 
-This is a command line tool which can be used for publishing multiple or single ad4m languages at once. By default the languageLanguage that is published to is: https://github.com/fluxsocial/language-publish. In order for languages published here to be resolvable in your app, you must also use the same languageLanguage. If you wish to change the languageLanguage that is used for publishing, you can point to a different remote bundle by changing the `const languageLanguage` inside `scripts/prepareBootstrapSeed.js`.
+This is a command line tool which can be used for publishing multiple or single ad4m languages at once. By default the languageLanguage that is published to is: https://github.com/fluxsocial/language-publish. In order for languages published here to be resolvable in your app, you must also use the same languageLanguage. If you wish to change the languageLanguage that is used for publishing and for the generation of a seed file. You can point to a different remote bundle by changing the value inside `scripts/languageLanguageResource`.
 
 # Usage
 
@@ -28,6 +28,14 @@ Once the above step has been run succesfully a `publishedLanguages.json` file wi
 
 ```
 node dist/index.js --agent /path/to/agent/to/publish/with --passphrase passphraseOfAgent --bundle /path/to/bundle.js --meta '{\"name\":\"Name of lang\",\"description\":\"Description of lang\",\"sourceCodeLink\":\"LinkToSourceCOde\" \"possibleTemplateParams\":[\"templateParams\", ...]}'
+```
+
+#### Generating a bootstrap seed
+
+This ability allows the generation of a bootstrap seed to be used in ad4m ecosystem. It expects that `publishedLanguages.json` contains all required system languages and will fetch the languageLanguage from the `const languageLanguageResource` set in the `scripts/generateBootstrapSeed.js` file. To create a bootstrap seed run:
+
+```
+npm run generate-bootstrap-seed
 ```
 
 # F&Q's
