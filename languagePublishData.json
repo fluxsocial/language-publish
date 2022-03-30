@@ -1,0 +1,20 @@
+{
+  "shortform": {
+    "meta": {
+      "name": "shortform-expression",
+      "description": "Shortform expression for flux application",
+      "sourceCodeLink": "https://github.com/juntofoundation/ad4m-languages",
+      "possibleTemplateParams": ["uid", "name"]
+    },
+    "resource": "/home/josh/Documents/junto/ad4m-languages/release/shortform/bundle.js"
+  },
+  "social-context": {
+    "meta": {
+      "name": "social-context",
+      "description": "Holochain based LinkLanguage",
+      "sourceCodeLink": "https://github.com/fluxsocial/Social-Context",
+      "possibleTemplateParams": ["uid", "name", "description"]
+    },
+    "resource": "https://github.com/fluxsocial/Social-Context/releases/download/0.0.22/bundle.js"
+  }
+}

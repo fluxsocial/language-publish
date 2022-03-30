@@ -13,6 +13,7 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import wget from 'wget-improved';
 import fetch from 'node-fetch';
+
 const logger = {
   info: (...args: any[]) => !global.hideLogs && console.log(chalk.blue('[INFO]'),...args),
   error: (...args: any[]) => !global.hideLogs && console.error(chalk.red('[ERROR]'), ...args)
@@ -71,6 +72,7 @@ async function getAd4mHostBinary(relativePath: string) {
     }
   });
 }
+const languagesPath = path.join("./languages");
 
 async function findAndKillProcess(processName: string) {
   try {
@@ -97,8 +99,8 @@ async function publishLanguage(binaryPath: string, bundle: string, meta: string)
   }
 }
 
-async function installLanguageAndPublish(child: any, binaryPath: string, defaultLangPath: string, bundle?: string, meta?: string, configPath?: string, resolve?: any) {  
-  const generateAgentResponse = execSync(`${binaryPath} agent unlock --passphrase passphrase`, { encoding: 'utf-8' }).match(/did:key:\w+/)
+async function installLanguageAndPublish(child: any, binaryPath: string, passphrase: string, bundle?: string, meta?: string, configPath?: string, resolve?: any) {  
+  const generateAgentResponse = execSync(`${binaryPath} agent unlock --passphrase ${passphrase}`, { encoding: 'utf-8' }).match(/did:key:\w+/)
   const currentAgentDid =  generateAgentResponse![0];
   logger.info(`Current Agent did: ${currentAgentDid}`);
   
@@ -108,7 +110,7 @@ async function installLanguageAndPublish(child: any, binaryPath: string, default
     console.log('config', config);
     
     for (const [lang, meta] of Object.entries(config)) {
-      const bundle = path.join(defaultLangPath, lang, "build", "bundle.js");
+      const bundle = path.join(languagesPath, lang, "build", "bundle.js");
       const language = await publishLanguage(binaryPath, bundle, JSON.stringify(meta))
       langAddress[lang] = language.address;
     }
@@ -130,7 +132,7 @@ async function installLanguageAndPublish(child: any, binaryPath: string, default
 }
 
 
-export function startServer(relativePath: string, agent: string, networkBootstrapSeed: string, binaryPath: string, defaultLangPath: string, bundle?: string, meta?: string, config?: string, port?: number,) {
+export function startServer(relativePath: string, agent: string, networkBootstrapSeed: string, binaryPath: string, passphrase: string, bundle?: string, meta?: string, config?: string, port?: number,) {
   return new Promise(async (resolve, reject) => {
     const dataPath = path.join(getAppDataPath(relativePath), 'ad4m')
     fs.removeSync(dataPath)
@@ -161,7 +163,7 @@ export function startServer(relativePath: string, agent: string, networkBootstra
 
     child.stdout.on('data', async (data: any) => {
       if (data.toString().includes('AD4M init complete')) {
-        installLanguageAndPublish(child, binaryPath, defaultLangPath, bundle, meta, config, resolve);
+        installLanguageAndPublish(child, binaryPath, passphrase, bundle, meta, config, resolve);
       }
     });
 
@@ -207,12 +209,6 @@ async function main() {
       describe: 'Meta information for the language to be installed',
       alias: 'm'
     },
-    defaultLangPath: {
-      type: 'string',
-      describe: 'Local bulid-in language to be used instead of the packaged ones',
-      default: path.join(__dirname, './test-temp/languages'),
-      alias: 'dlp'
-    },
     agent: {
       type: 'string',
       describe: 'Agent to be used for publishing languages',
@@ -224,6 +220,11 @@ async function main() {
       require: true,
       alias: 'nbf'
     },
+    passphrase: {
+      type: 'string',
+      describe: 'Passphrase used to unlock the agent who will be used for publishing',
+      required: true
+    }
   })
   .strict()
   .fail((msg, err) => {
@@ -242,7 +243,7 @@ async function main() {
 
   const seedFile = path.isAbsolute(args.networkBootstrapSeed) ? args.networkBootstrapSeed : path.join(__dirname, args.networkBootstrapSeed)
 
-  await startServer('ad4m-publish', args.agent, seedFile, binaryPath!, args.defaultLangPath, args.bundle, args.meta, args.config, args.port)
+  await startServer('ad4m-publish', args.agent, seedFile, binaryPath!, args.passphrase, args.bundle, args.meta, args.config, args.port)
 }
 
 main();
