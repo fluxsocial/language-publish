@@ -19,12 +19,12 @@ npm i && npm run prepare && npm run build
 #### Publish Multiple Languages
 
 ```
-node dist/index.js --agent /path/to/agent/to/publish/from --config ./languagePublishData
+node dist/index.js --agent /path/to/agent/to/publish/with --config ./languagePublishData
 ```
 
 #### Publish A Single Language
 
 ```
-node dist/index.js --agent /path/to/agent/to/publish/from --bundle /path/to/bundle.js --meta '{\"name\":\"Name of lang\",\"description\":\"Description of lang\",\"sourceCodeLink\":\"LinkToSourceCOde\" \"possibleTemplateParams\":[\"templateParams\", ...]}'
+node dist/index.js --agent /path/to/agent/to/publish/with --bundle /path/to/bundle.js --meta '{\"name\":\"Name of lang\",\"description\":\"Description of lang\",\"sourceCodeLink\":\"LinkToSourceCOde\" \"possibleTemplateParams\":[\"templateParams\", ...]}'
 ```
 
