@@ -150,13 +150,13 @@ export function startServer(relativePath: string, agent: string, networkBootstra
     await findAndKillProcess('holochain')
     await findAndKillProcess('lair-keystore')
 
-    execSync(`${binaryPath} init --dataPath ${relativePath}`, { encoding: 'utf-8' });
+    execSync(`${binaryPath} init --dataPath ${relativePath} --networkBootstrapSeed ${networkBootstrapSeed} --overrideConfig`, { encoding: 'utf-8' });
 
     logger.info('ad4m initialized')
 
     let child: any;
 
-    child = spawn(`${binaryPath}`, ['serve', '--dataPath', relativePath, '--port', port!.toString(), '--networkBootstrapSeed', networkBootstrapSeed, '--languageLanguageOnly', 'true'])
+    child = spawn(`${binaryPath}`, ['serve', '--dataPath', relativePath, '--port', port!.toString(), '--languageLanguageOnly', 'true'])
 
     const logFile = fs.createWriteStream(path.join(__dirname, 'ad4m-publish.log'))
 
@@ -224,7 +224,7 @@ async function main() {
     networkBootstrapSeed: {
       type: 'string',
       describe: 'Path to the seed file',
-      default: '../bootstrapSeed.json',
+      default: './bootstrapSeed.json',
       alias: 'nbf'
     },
     passphrase: {
