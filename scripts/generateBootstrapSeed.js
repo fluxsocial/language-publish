@@ -2,10 +2,11 @@
 const getAppDataPath = require('appdata-path');
 const fs = require("fs-extra");
 const wget = require("node-wget-js");
+const { homedir } = require('os');
 const path = require("path");
 
 //Prepare const values
-const publishingAgentPath = path.join(getAppDataPath("ad4m-publish"), "ad4m", "agent.json");
+const publishingAgentPath = path.join(homedir(), "ad4m-publish", "ad4m", "agent.json");
 const languagesDirectory = path.join("./languages");
 const ad4mBootstrapSeed = "./ad4mBootstrapSeed.json";
 const languageLanguage = fs.readFileSync("./scripts/languageLanguageResource").toString();
@@ -14,8 +15,8 @@ const publishedLanguagesPath = path.join("./publishedLanguages.json");
 const publishedLanguages = JSON.parse(fs.readFileSync(publishedLanguagesPath).toString());
 
 //Check that publishedLanguages contains all required languages
-if (!publishedLanguages["socialContext"]) {
-    throw new Error("publishedLanguages.json does not contain a socialContext hash")
+if (!publishedLanguages["perspectiveDiffSync"]) {
+    throw new Error("publishedLanguages.json does not contain a perspectiveDiffSync hash")
 }
 if (!publishedLanguages["agentLanguage"]) {
     throw new Error("publishedLanguages.json does not contain a agentLanguage hash")
@@ -50,7 +51,7 @@ if (fs.existsSync(languageLanguageBundlePath)) {
 
 wget({ url: languageLanguage, dest: languageLanguageBundlePath }, () => {
     seedData["trustedAgents"] = [ad4mAgent];
-    seedData["knownLinkLanguages"] = [publishedLanguages["socialContext"]];
+    seedData["knownLinkLanguages"] = [publishedLanguages["perspectiveDiffSync"]];
     seedData["agentLanguage"] = publishedLanguages["agentLanguage"];
     seedData["directMessageLanguage"] = publishedLanguages["directMessageLanguage"];
     seedData["perspectiveLanguage"] = publishedLanguages["perspectiveLanguage"];
