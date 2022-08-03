@@ -1,12 +1,12 @@
 {
-  "socialContext": {
+  "perspectiveDiffSync": {
     "meta": {
-      "name": "socialContext",
-      "description": "Holochain based LinkLanguage",
-      "sourceCodeLink": "https://github.com/fluxsocial/Social-Context",
+      "name": "perspectiveDiffSync",
+      "description": "Holochain based Perspective link sharing language",
+      "sourceCodeLink": "https://github.com/perspect3vism/perspective-diff-sync",
       "possibleTemplateParams": ["uid", "name", "description"]
     },
-    "resource": "https://github.com/fluxsocial/Social-Context/releases/download/0.0.22/bundle.js"
+    "resource": "https://github.com/perspect3vism/perspective-diff-sync/releases/download/0.0.9/bundle.js"
   },
   "agentLanguage": {
     "meta": {
@@ -15,7 +15,7 @@
       "sourceCodeLink": "https://github.com/perspect3vism/agent-language",
       "possibleTemplateParams": ["uid", "name", "description"]
     },
-    "resource": "https://github.com/perspect3vism/agent-language/releases/download/0.0.10/bundle.js"
+    "resource": "https://github.com/perspect3vism/agent-language/releases/download/0.0.12/bundle.js"
   },
   "directMessageLanguage": {
     "meta": {
@@ -24,12 +24,12 @@
       "sourceCodeLink": "https://github.com/perspect3vism/direct-message-language", 
       "possibleTemplateParams": ["recipient_did", "recipient_hc_agent_pubkey"]
     },
-    "resource": "https://github.com/perspect3vism/direct-message-language/releases/download/0.0.4/bundle.js"
+    "resource": "https://github.com/perspect3vism/direct-message-language/releases/download/0.0.6/bundle.js"
   },
   "neighbourhoodLanguage": {
     "meta": {
       "name": "neighbourhoodLanguage", 
-      "description": "Holochain based language for storing neighbourhood expressions",
+      "description": "Language for storing neighbourhood expressions that leverages StorJ",
       "sourceCodeLink": "https://github.com/fluxsocial/neighbourhood-language", 
       "possibleTemplateParams": ["uid", "name", "description"]
     },

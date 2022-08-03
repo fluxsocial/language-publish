@@ -13,6 +13,7 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import wget from 'wget-improved';
 import fetch from 'node-fetch';
+import { homedir } from 'os';
 
 const logger = {
   info: (...args: any[]) => !global.hideLogs && console.log(chalk.blue('[INFO]'),...args),
@@ -105,6 +106,7 @@ async function writeLanguageHashes() {
 }
 
 async function installLanguageAndPublish(child: any, binaryPath: string, passphrase: string, bundle?: string, meta?: string, configPath?: string, resolve?: any) {  
+  logger.info("Unlocking agent..");
   const generateAgentResponse = execSync(`${binaryPath} agent unlock --passphrase ${passphrase}`, { encoding: 'utf-8' }).match(/did:key:\w+/)
   const currentAgentDid =  generateAgentResponse![0];
   logger.info(`Current Agent did: ${currentAgentDid}`);
@@ -140,7 +142,8 @@ async function installLanguageAndPublish(child: any, binaryPath: string, passphr
 
 export function startServer(relativePath: string, agent: string, networkBootstrapSeed: string, binaryPath: string, passphrase: string, bundle?: string, meta?: string, config?: string, port?: number,) {
   return new Promise(async (resolve, reject) => {
-    const dataPath = path.join(getAppDataPath(relativePath), 'ad4m')
+    const rootPath = path.join(homedir(), relativePath);
+    const dataPath = path.join(rootPath, "ad4m");
     fs.removeSync(dataPath)
     fs.mkdirSync(dataPath, { recursive: true })
     fs.mkdirSync(path.join(dataPath, 'data'))
@@ -156,19 +159,20 @@ export function startServer(relativePath: string, agent: string, networkBootstra
 
     let child: any;
 
-    child = spawn(`${binaryPath}`, ['serve', '--dataPath', relativePath, '--port', port!.toString(), '--languageLanguageOnly', 'true'])
+    child = spawn(`${binaryPath}`, ['serve', '--dataPath', relativePath, '--languageLanguageOnly', 'true'])
 
     const logFile = fs.createWriteStream(path.join(__dirname, 'ad4m-publish.log'))
 
     child.stdout.on('data', async (data: any) => {
-      logFile.write(data)
+      logFile.write(data);
     });
     child.stderr.on('data', async (data: any) => {
       logFile.write(data)
     })
 
     child.stdout.on('data', async (data: any) => {
-      if (data.toString().includes('AD4M init complete')) {
+      if (data.toString().includes('GraphQL server started, Unlock the agent to start holohchain')) {
+        logger.info("Starting to publish languages...")
         await installLanguageAndPublish(child, binaryPath, passphrase, bundle, meta, config, resolve);
         await writeLanguageHashes();
       }
