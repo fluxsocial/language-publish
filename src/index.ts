@@ -165,18 +165,16 @@ export function startServer(relativePath: string, agent: string, networkBootstra
 
     child.stdout.on('data', async (data: any) => {
       logFile.write(data);
-    });
-    child.stderr.on('data', async (data: any) => {
-      logFile.write(data)
-    })
-
-    child.stdout.on('data', async (data: any) => {
       if (data.toString().includes('GraphQL server started, Unlock the agent to start holohchain')) {
         logger.info("Starting to publish languages...")
         await installLanguageAndPublish(child, binaryPath, passphrase, bundle, meta, config, resolve);
         await writeLanguageHashes();
       }
     });
+
+    child.stderr.on('data', async (data: any) => {
+      logFile.write(data)
+    })
 
     child.on('exit', (code: any) => {
       logger.info(`exit is called ${code}`);
